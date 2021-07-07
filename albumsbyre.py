@@ -39,7 +39,7 @@ def Push(ablums,count,time):
 #get config
 def GetConfig():
     config=ConfigParser()
-    config.read('user.config')
+    config.read('user.config', encoding='GBK')
     initstamp=config['setting']['timestamp']
     url=config['setting']['url']
     vipday=config['vip']['day']
@@ -53,7 +53,7 @@ def GetConfig():
 #change config
 def ReConfig(section,name,v):
     config = ConfigParser()
-    config.read('user.config')
+    config.read('user.config', encoding='GBK')
     config.set(section,name,v)
     config.write(open('user.config', "w"))
     print("re-configed")
@@ -61,7 +61,7 @@ def ReConfig(section,name,v):
 #get having ablumes
 def GetHave():
     config = ConfigParser()
-    config.read('user.config')
+    config.read('user.config', encoding='GBK')
     havingablums = []
     count = config['ablums']['count']
     print("already have " + count + " ablums")
@@ -108,9 +108,6 @@ if __name__=="__main__":
     else:
         print("connecting error,please retry")
     #find update time
-    #print(r.content.decode("utf-8"))
-    #html = etree.HTML(r.content.decode("utf-8"))
-    #recently=html.xpath('//*[@id="post-领取网易云音乐数字专辑"]/div[2]/p[1]/text()')
     r=r.content.decode("utf-8")
     recently=re.findall(r'\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}',r)
     #print(r)
