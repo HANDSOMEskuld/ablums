@@ -39,7 +39,7 @@ def Push(ablums,count,time):
 #get config
 def GetConfig():
     config=ConfigParser()
-    config.read('user.config', encoding='UTF-8-sig')
+    config.read('user.config')
     initstamp=config['setting']['timestamp']
     url=config['setting']['url']
     vipday=config['vip']['day']
@@ -53,7 +53,7 @@ def GetConfig():
 #change config
 def ReConfig(section,name,v):
     config = ConfigParser()
-    config.read('user.config', encoding='UTF-8-sig')
+    config.read('user.config')
     config.set(section,name,v)
     config.write(open('user.config', "w"))
     print("re-configed")
@@ -61,7 +61,7 @@ def ReConfig(section,name,v):
 #get having ablumes
 def GetHave():
     config = ConfigParser()
-    config.read('user.config', encoding='UTF-8-sig')
+    config.read('user.config')
     havingablums = []
     count = config['ablums']['count']
     print("already have " + count + " ablums")
