@@ -9,6 +9,9 @@
 name: Upload Python Package
 
 on: 
+  push: # push触发
+    branches: [ main ]
+  workflow_dispatch: # 手动触发
   release:
     types: [published,push, pull_request]
   schedule:
