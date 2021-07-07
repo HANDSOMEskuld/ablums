@@ -36,5 +36,6 @@ jobs:
         pip install requests
     - name: Build package
       run: |
-        ls
         python albumsbyre.py
+    - name: Repush
+      uses : stefanzweifel/git-auto-commit-action@v4
