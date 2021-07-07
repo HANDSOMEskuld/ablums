@@ -9,20 +9,29 @@ def IfUpdate(initstamp,timestamp):
     #initstamp=int(1625553629)
     if (timestamp>initstamp):
         print("have updated")
-        qyid = 'wwbce37d7e2b926c5d'
-        miyue = 'sxCU_Bjk92_171_V4sGvAFRC4NPeVCAlwoI0nYrpBgY'
-        appid = '1000002'
-        # card massage
-        url2 = 'https://api.htm.fun/api/Wechat/text_card/'
-        title = '点击领取新的数字专辑啦！'
-        description = 'descriptionaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-        url = 'https://chen310.github.io/music/albums/'
-        r2 = requests.get(url2, params={"corpid": qyid, "corpsecret": miyue, "agentid": appid, "title": title,
-                                        "description": description, "url": url})
         ReConfig("setting","timestamp",str(timestamp))
         return 1
     else:
         return 0
+
+#missage
+def Push(ablums,count,time):
+    qyid = 'wwbce37d7e2b926c5d'
+    miyue = 'sxCU_Bjk92_171_V4sGvAFRC4NPeVCAlwoI0nYrpBgY'
+    appid = '1000002'
+    # card massage
+    url2 = 'https://api.htm.fun/api/Wechat/text_card/'
+    title = '点击领取新的'+str(count)+'张数字专辑啦！'
+    des=''
+    for i in ablums:
+        des=des+'·'+i+'\n'
+    description='更新时间：'+time+'\n'+des+'斯人若彩虹，遇上方知有'
+    #description = '<div class=\"gray\">'+time+'</div> <div class=\"normal\"> '+des+'</div>共有'+str(count)+'张专辑<div class=\"highlight\">斯人若彩虹，遇上方知有</div>"'
+    print(description)
+    url = 'https://chen310.github.io/music/albums/'
+    r2 = requests.get(url2, params={"corpid": qyid, "corpsecret": miyue, "agentid": appid, "title": title,
+                                    "description": description, "url": url})
+    print("have pushed")
 
 #get config
 def GetConfig():
@@ -47,8 +56,22 @@ def ReConfig(section,name,v):
     print("re-configed")
 
 #have update
-def Updata(html):
-    pass
+def Updata(time,r):
+    r=r.replace(' ','')
+    num=0
+    count=0
+    ablums=[]
+    a = re.findall(r'([pr])>(.*?)\(', r)
+    for i in a:
+        if i[0]=='p':
+            num=num+1
+            if num==2:
+                break
+        count=count+1
+        ablums.append(i[1])
+        print(i[1])
+    print("total",count)
+    Push(ablums,count,time)
     #ablums=html.xpath
 
 
@@ -68,13 +91,14 @@ if __name__=="__main__":
     #print(r.content.decode("utf-8"))
     #html = etree.HTML(r.content.decode("utf-8"))
     #recently=html.xpath('//*[@id="post-领取网易云音乐数字专辑"]/div[2]/p[1]/text()')
-    recently=re.findall(r'>数据更新于*<',r.content.decode("utf-8"))
-    print(recently)
-    recently=recently[0].split('于')[1]
+    r=r.content.decode("utf-8")
+    recently=re.findall(r'\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}',r)
+    #print(r)
+    recently=recently[0]
     #time to timestamp
     timestamp=int(time.mktime(time.strptime(recently, '%Y-%m-%d %H:%M:%S')))
     print("recently update-time:"+recently+";timestamp is "+str(timestamp))
     if(IfUpdate(config['initstamp'],timestamp)):
-        Updata(html)
+        Updata(recently,r)
     else:
         print("havn't updated")
