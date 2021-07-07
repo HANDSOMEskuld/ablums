@@ -33,7 +33,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install build
-      #pip install requests
+        pip install requests
     - name: Build package
       run: |
         python albumsbyre.py
