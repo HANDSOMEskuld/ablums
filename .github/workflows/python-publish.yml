@@ -36,5 +36,5 @@ jobs:
         pip install requests
     - name: Build package
       run: |
-        cd ablums
+        ls
         python albumsbyre.py
