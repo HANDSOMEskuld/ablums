@@ -16,6 +16,9 @@ def IfUpdate(initstamp,timestamp):
 
 #missage
 def Push(ablums,count,time):
+    if count==0:
+        print("cancel pushing")
+        return
     qyid = 'wwbce37d7e2b926c5d'
     miyue = 'sxCU_Bjk92_171_V4sGvAFRC4NPeVCAlwoI0nYrpBgY'
     appid = '1000002'
@@ -36,7 +39,7 @@ def Push(ablums,count,time):
 #get config
 def GetConfig():
     config=ConfigParser()
-    config.read('user.config', encoding='UTF-8-sig')
+    config.read('user.config')
     initstamp=config['setting']['timestamp']
     url=config['setting']['url']
     vipday=config['vip']['day']
@@ -50,10 +53,22 @@ def GetConfig():
 #change config
 def ReConfig(section,name,v):
     config = ConfigParser()
-    config.read('user.config', encoding='UTF-8-sig')
+    config.read('user.config')
     config.set(section,name,v)
     config.write(open('user.config', "w"))
     print("re-configed")
+
+#get having ablumes
+def GetHave():
+    config = ConfigParser()
+    config.read('user.config')
+    havingablums = []
+    count = config['ablums']['count']
+    print("already have " + count + " ablums")
+    for i in range(1, int(count) + 1):
+        a = config['ablums']['a' + str(i)]
+        havingablums.append(a)
+    return havingablums
 
 #have update
 def Updata(time,r):
@@ -62,15 +77,20 @@ def Updata(time,r):
     count=0
     ablums=[]
     a = re.findall(r'([pr])>(.*?)\(', r)
+    havingablums=GetHave()
     for i in a:
         if i[0]=='p':
             num=num+1
             if num==2:
                 break
-        count=count+1
-        ablums.append(i[1])
+        #have or not
+        if i[1] in havingablums:
+            continue
+        else:
+            count=count+1
+            ablums.append(i[1])
         print(i[1])
-    print("total",count)
+    print("new albums:",count)
     Push(ablums,count,time)
     #ablums=html.xpath
 
