@@ -65,7 +65,7 @@ def GetHave():
     for i in range(1, int(count) + 1):
         a = config['ablums']['a' + str(i)]
         havingablums.append(a)
-    return havingablums,count
+    return havingablums,int(count)
 
 
 
@@ -89,7 +89,7 @@ def Updata(time,r):
             count=count+1
             ablums.append(i[1])
             havingcount=havingcount+1
-            ReConfig("ablums", "a"+havingcount, i[1])
+            ReConfig("ablums", "a"+str(havingcount), i[1])
         print(i[1])
     print("new albums:",count)
     if count == 0:
