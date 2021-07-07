@@ -16,9 +16,6 @@ def IfUpdate(initstamp,timestamp):
 
 #missage
 def Push(ablums,count,time):
-    if count==0:
-        print("cancel pushing")
-        return
     qyid = 'wwbce37d7e2b926c5d'
     miyue = 'sxCU_Bjk92_171_V4sGvAFRC4NPeVCAlwoI0nYrpBgY'
     appid = '1000002'
@@ -68,7 +65,9 @@ def GetHave():
     for i in range(1, int(count) + 1):
         a = config['ablums']['a' + str(i)]
         havingablums.append(a)
-    return havingablums
+    return havingablums,count
+
+
 
 #have update
 def Updata(time,r):
@@ -77,7 +76,7 @@ def Updata(time,r):
     count=0
     ablums=[]
     a = re.findall(r'([pr])>(.*?)\(', r)
-    havingablums=GetHave()
+    havingablums,havingcount=GetHave()
     for i in a:
         if i[0]=='p':
             num=num+1
@@ -89,8 +88,13 @@ def Updata(time,r):
         else:
             count=count+1
             ablums.append(i[1])
+            havingcount=havingcount+1
+            ReConfig("ablums", "a"+havingcount, i[1])
         print(i[1])
     print("new albums:",count)
+    if count == 0:
+        print("cancel pushing")
+        return
     Push(ablums,count,time)
     #ablums=html.xpath
 
@@ -108,6 +112,9 @@ if __name__=="__main__":
     else:
         print("connecting error,please retry")
     #find update time
+    #print(r.content.decode("utf-8"))
+    #html = etree.HTML(r.content.decode("utf-8"))
+    #recently=html.xpath('//*[@id="post-领取网易云音乐数字专辑"]/div[2]/p[1]/text()')
     r=r.content.decode("utf-8")
     recently=re.findall(r'\d{4}-\d{1,2}-\d{1,2}\s\d{1,2}:\d{1,2}:\d{1,2}',r)
     #print(r)
