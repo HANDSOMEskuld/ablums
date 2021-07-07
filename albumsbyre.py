@@ -91,6 +91,7 @@ def Updata(time,r):
             havingcount=havingcount+1
             ReConfig("ablums", "a"+str(havingcount), i[1])
         print(i[1])
+    ReConfig("ablums", "count", havingcount)
     print("new albums:",count)
     if count == 0:
         print("cancel pushing")
